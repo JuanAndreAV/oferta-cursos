@@ -149,6 +149,12 @@
     display:inline-block; background:var(--warn-border); color:#5c4a12; font-size:.68rem;
     font-weight:700; border-radius:5px; padding:1px 6px;
   }
+  .badge-agotado{
+    display:inline-block; background:#f4d4d4; color:#8a1f1f; font-size:.68rem;
+    font-weight:700; border-radius:5px; padding:1px 6px; letter-spacing:.3px;
+  }
+  tr.row-agotado{ opacity:.55; }
+  tr.row-agotado:hover{ opacity:.85; }
 
   table{
     width:100%; border-collapse:collapse; background:#fff;
@@ -244,6 +250,10 @@
 
     <div class="row-toggles">
       <label class="toggle">
+        <input type="checkbox" id="f-hide-agotados" checked>
+        Ocultar cursos agotados
+      </label>
+      <label class="toggle">
         <input type="checkbox" id="f-hide-verificar">
         Ocultar cursos pendientes de verificar
       </label>
@@ -256,6 +266,7 @@
     <div class="legend">
       <span class="dot">🟢 Cupo confirmado</span>
       <span class="dot">— Cupo sin especificar en la fuente</span>
+      <span class="dot"><span class="badge-agotado">AGOTADO</span> Sin cupo disponible</span>
       <span class="dot"><span class="badge-warn">⚠️</span> Dato a verificar</span>
     </div>
   </div>
@@ -278,20 +289,18 @@ const cursos = [
 {area:"Biblioteca / Lectura", curso:"Conexiones Digitales (antes 'Laboratorio Digital Biblioteca')", docente:"Alejandra Uribe", dias:["Lunes"], horario:"Lunes 2:00–4:00 pm", cupo:15, edadMin:30, edadMax:null, salon:"", modalidad:"", notas:"Cambio de nombre y descripción del curso.", verificar:false},
 {area:"Biblioteca / Lectura", curso:"Biblioteca para el Bienestar (yoga y salud)", docente:"Alejandra Uribe", dias:["Viernes"], horario:"Viernes 2:00–3:00 pm", cupo:15, edadMin:14, edadMax:75, salon:"", modalidad:"Nuevo", prereq:"Mat de yoga (opcional)", notas:"Profesor acompañante: Juan Diego Bernal Guisao.", verificar:false},
 {area:"Biblioteca / Lectura", curso:"Cuentos pintados", docente:"Elizabeth Cristina Matallana Penagos", dias:["Sábado"], horario:"Sábados 10:00–11:00 am", cupo:20, edadMin:8, edadMax:12, salon:"Biblioteca Municipal de Girardota", modalidad:"Nuevo", notas:"", verificar:false},
-{area:"Biblioteca / Lectura", curso:"El Paraíso - Danza (formación descentralizada)", docente:"Danielo Arias Munera", dias:[], horario:"8:00 am (día sin especificar)", cupo:20, edadMin:4, edadMax:7, salon:"I.E. Olaya Herrera", modalidad:"", notas:"Cambio de sede: ahora en I.E. Olaya Herrera, con estudiantes de preescolar y primero. Avalado por coordinación académica.", verificar:true, verificarNota:"Confirmar el día de la semana; no aparece en la fuente."},
 
 // PRIMERA INFANCIA
-{area:"Primera Infancia", curso:"Siembra 01", docente:"Pablo Andrés Ramos Pérez", dias:["Martes"], horario:"Martes 6:00–7:00 pm", cupo:12, edadMin:4, edadMax:5, salon:"Salón 1 Innova o Ludoteca", modalidad:"", notas:"", verificar:false},
-{area:"Primera Infancia", curso:"Siembra 02", docente:"Pablo Andrés Ramos Pérez", dias:["Miércoles"], horario:"Miércoles 6:00–7:00 pm", cupo:8, edadMin:4, edadMax:5, salon:"Teatro Innova", modalidad:"", notas:"", verificar:false},
-{area:"Primera Infancia", curso:"Siembra 03", docente:"Pablo Andrés Ramos Pérez", dias:["Jueves"], horario:"Jueves 6:00–7:00 pm", cupo:10, edadMin:4, edadMax:5, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
+{area:"Primera Infancia", curso:"Siembra 01", docente:"Pablo Andrés Ramos Pérez", dias:["Martes"], horario:"Martes 6:00–7:00 pm", cupo:7, edadMin:4, edadMax:5, salon:"Salón 1 Innova o Ludoteca", modalidad:"", notas:"", verificar:false},
+{area:"Primera Infancia", curso:"Siembra 02", docente:"Pablo Andrés Ramos Pérez", dias:["Miércoles"], horario:"Miércoles 6:00–7:00 pm", cupo:1, edadMin:4, edadMax:5, salon:"Teatro Innova", modalidad:"", notas:"", verificar:false},
+{area:"Primera Infancia", curso:"Siembra 03", docente:"Pablo Andrés Ramos Pérez", dias:["Jueves"], horario:"Jueves 6:00–7:00 pm", cupo:8, edadMin:4, edadMax:5, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
 
 // CUERDAS
 {area:"Cuerdas", curso:"Viola Iniciación (nuevos)", docente:"Juan Andrés Álvarez Velásquez", dias:["Lunes"], horario:"Lunes 2:00–3:00 pm", cupo:3, edadMin:9, edadMax:16, salon:"Cuerdas Frotadas", modalidad:"Nuevos", notas:"Se cambia de jueves a lunes; se abre para nuevos este semestre.", verificar:false},
 {area:"Cuerdas", curso:"Violonchelo (nuevos)", docente:"Santiago Echeverri Zapata", dias:["Viernes"], horario:"Viernes 3:00–5:00 pm", cupo:6, edadMin:10, edadMax:null, salon:"", modalidad:"Nuevos", notas:"Se amplían cupos para nuevos ingresos.", verificar:false},
-{area:"Cuerdas", curso:"Semillero de cuerdas (nuevo)", docente:"Santiago Echeverri Zapata", dias:["Viernes"], horario:"Viernes, horario a convenir", cupo:20, edadMin:10, edadMax:16, salon:"", modalidad:"Nuevo", prereq:"Estudiantes antiguos con dominio básico de violín, viola, cello o contrabajo", notas:"", verificar:true, verificarNota:"Confirmar horario exacto (aún por definir)."},
-{area:"Cuerdas", curso:"Guitarra Intermedio Jóvenes", docente:"Leonardo Hincapié", dias:["Martes"], horario:"Martes 5:00–7:00 pm", cupo:15, edadMin:13, edadMax:39, salon:"Salón 10 Cuerdas Frotadas", modalidad:"", notas:"Etiqueta oficial del curso: 16–25 años; rango real de matriculados: 13–39.", verificar:false},
-{area:"Cuerdas", curso:"Guitarra Inicial Jóvenes 02", docente:"Leonardo Hincapié", dias:["Miércoles"], horario:"Miércoles 8:00–10:00 am", cupo:10, edadMin:13, edadMax:39, salon:"Salón 10 Cuerdas Frotadas", modalidad:"", notas:"", verificar:false},
-{area:"Cuerdas", curso:"Bandola niños", docente:"Valeria Arenas", dias:["Miércoles"], horario:"Miércoles 3:00–5:00 pm", cupo:null, edadMin:9, edadMax:12, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Cupo no especificado en la fuente."},
+{area:"Cuerdas", curso:"Guitarra Intermedio Jóvenes", docente:"Leonardo Hincapié", dias:["Martes"], horario:"Martes 5:00–7:00 pm", cupo:7, edadMin:13, edadMax:39, salon:"Salón 10 Cuerdas Frotadas", modalidad:"", notas:"Etiqueta oficial del curso: 16–25 años; rango real de matriculados: 13–39.", verificar:false},
+{area:"Cuerdas", curso:"Guitarra Inicial Jóvenes 02", docente:"Leonardo Hincapié", dias:["Miércoles"], horario:"Miércoles 8:00–10:00 pm", cupo:0, edadMin:13, edadMax:39, salon:"Salón 10 Cuerdas Frotadas", modalidad:"", notas:"", verificar:false},
+{area:"Cuerdas", curso:"Bandola niños", docente:"Valeria Arenas", dias:["Viernes"], horario:"Viernes 3:00–4:00 pm", cupo:null, edadMin:9, edadMax:12, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Cupo no especificado en la fuente."},
 {area:"Cuerdas", curso:"Bajo Eléctrico 05 (nuevos)", docente:"John Edison García", dias:["Martes"], horario:"Martes 11:00 am–12:00 pm", cupo:null, edadMin:14, edadMax:null, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"Cupo no especificado en la fuente."},
 {area:"Cuerdas", curso:"Contrabajo [13+]", docente:"Edgar de Jesús Ramírez Gallo", dias:["Martes","Jueves"], horario:"Martes 5:00–6:00 pm / Jueves 4:00–5:00 pm", cupo:null, edadMin:13, edadMax:null, salon:"", modalidad:"", notas:"Se abre para estudiantes nuevos.", verificar:true, verificarNota:"Cupo no especificado en la fuente."},
 {area:"Cuerdas", curso:"Contrabajo (nuevos) [13–20 años]", docente:"Edgar de Jesús Ramírez Gallo", dias:["Miércoles"], horario:"Miércoles 4:00–5:00 pm (posible día adicional sin especificar)", cupo:null, edadMin:13, edadMax:20, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"El documento fuente parece tener un día recortado/incompleto en el horario. Confirmar con el docente."},
@@ -311,7 +320,7 @@ const cursos = [
 {area:"Vientos", curso:"Corno Francés y Trompeta — Grupo A", docente:"Stiven Ortega", dias:["Miércoles"], horario:"Miércoles 9:00–10:00 am", cupo:8, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad de ingreso no especificada; confirmar con el docente."},
 {area:"Vientos", curso:"Corno Francés y Trompeta — Grupo B", docente:"Stiven Ortega", dias:["Miércoles"], horario:"Miércoles 3:00–4:00 pm", cupo:8, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad de ingreso no especificada; confirmar con el docente."},
 {area:"Vientos", curso:"Corno Francés y Trompeta — Grupo C", docente:"Stiven Ortega", dias:["Martes"], horario:"Martes 4:00–5:00 pm", cupo:8, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad de ingreso no especificada; confirmar con el docente."},
-{area:"Vientos", curso:"Trombón", docente:"Juan José Trejos (tentativo)", dias:["Miércoles"], horario:"Miércoles 3:00 pm", cupo:4, edadMin:10, edadMax:16, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"El docente se infiere del contexto (dato recibido junto con Eufonio y Tuba); confirmar asignación."},
+{area:"Vientos", curso:"Trombón", docente:"Juan José Trejos", dias:["Miércoles"], horario:"Miércoles 3:00 pm", cupo:4, edadMin:10, edadMax:16, salon:"", modalidad:"", notas:"", verificar:false},
 {area:"Vientos", curso:"Eufonio y Tuba", docente:"Juan José Trejos", dias:["Jueves"], horario:"Jueves 3:00 pm", cupo:6, edadMin:10, edadMax:17, salon:"", modalidad:"", notas:"", verificar:false},
 
 // PERCUSIÓN
@@ -319,47 +328,41 @@ const cursos = [
 {area:"Percusión", curso:"Percusión Sinfónica", docente:"Agustín Gómez Córdoba", dias:["Miércoles"], horario:"Miércoles 9:00 am", cupo:3, edadMin:7, edadMax:15, salon:"", modalidad:"Abierto a nuevos", notas:"", verificar:false},
 
 // PIANO
-{area:"Piano", curso:"Piano Adolescentes 04 (con experiencia)", docente:"Daniel Eduardo Hincapié Gómez", dias:["Miércoles"], horario:"Miércoles 7:00–8:00 pm", cupo:5, edadMin:15, edadMax:null, salon:"Salón Piano", modalidad:"Con experiencia", notas:"", verificar:false},
-{area:"Piano", curso:"Piano Jóvenes y Adultos 02 (nuevos)", docente:"Daniel Eduardo Hincapié Gómez", dias:["Lunes"], horario:"Lunes 6:00–7:00 pm", cupo:4, edadMin:16, edadMax:null, salon:"Salón Piano", modalidad:"Nuevos", prereq:"Un año de experiencia en clase", notas:"", verificar:false},
-{area:"Piano", curso:"Piano Adultos Sin Experiencia (nuevo)", docente:"Daniel Eduardo Hincapié Gómez", dias:["Sábado"], horario:"Sábado 2:00–3:00 pm", cupo:5, edadMin:16, edadMax:70, salon:"Salón Piano", modalidad:"Nuevo, sin prerrequisitos", notas:"Coincide en horario con el ensayo de Cuerdas Frotadas.", verificar:false},
+{area:"Piano", curso:"Piano Adolescentes 04 (con experiencia)", docente:"Daniel Eduardo Hincapié Gómez", dias:["Miércoles"], horario:"Miércoles 7:00–8:00 pm", cupo:1, edadMin:15, edadMax:null, salon:"Salón Piano", modalidad:"Con experiencia", notas:"", verificar:false},
+{area:"Piano", curso:"Piano Jóvenes y Adultos 02 (nuevos)", docente:"Daniel Eduardo Hincapié Gómez", dias:["Lunes"], horario:"Lunes 6:00–7:00 pm", cupo:0, edadMin:16, edadMax:null, salon:"Salón Piano", modalidad:"Nuevos", prereq:"Un año de experiencia en clase", notas:"", verificar:false},
+{area:"Piano", curso:"Piano Adultos Sin Experiencia (nuevo)", docente:"Daniel Eduardo Hincapié Gómez", dias:["Sábado"], horario:"Sábado 2:00–3:00 pm", cupo:0, edadMin:16, edadMax:70, salon:"Salón Piano", modalidad:"Nuevo, sin prerrequisitos", notas:"Coincide en horario con el ensayo de Cuerdas Frotadas.", verificar:false},
 {area:"Piano", curso:"Piano Jóvenes y Adultos 04 (con experiencia)", docente:"John Edison García Castro", dias:["Martes"], horario:"Martes 9:00–10:00 am", cupo:3, edadMin:16, edadMax:null, salon:"", modalidad:"Con experiencia", notas:"", verificar:false},
 
 // CANTO / TÉCNICA VOCAL — Sonia Gallego
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 02 (nuevos)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:7, edadMin:7, edadMax:12, salon:"", modalidad:"Nuevos y antiguos", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte; confirmar contra el horario del semestre anterior."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 02 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:10, edadMin:7, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"Incluye iniciación musical y técnica vocal.", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 01 (nuevos)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:7, edadMin:7, edadMax:12, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 01 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:7, edadMin:7, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes 02 (nuevos)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:5, edadMin:13, edadMax:18, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes 01 (nuevos)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:5, edadMin:13, edadMax:18, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Iniciación musical niños 02 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:9, edadMin:6, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Iniciación musical niños 01 (nuevos)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:5, edadMin:6, edadMax:12, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Iniciación musical niños 01 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:5, edadMin:6, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Canto / Técnica Vocal", curso:"Iniciación musical adolescentes 03 (nuevos)", docente:"Sonia Gallego Ramírez", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:7, edadMin:13, edadMax:18, salon:"", modalidad:"Nuevos", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 02 (nuevos)", docente:"Sonia Gallego Ramírez", dias:["Martes"], horario:"Martes 10:00–11:00 am", cupo:7, edadMin:7, edadMax:12, salon:"", modalidad:"Nuevos y antiguos", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 02 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:["Martes"], horario:"Martes 11:00 am–12:00 m", cupo:10, edadMin:7, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"Incluye iniciación musical y técnica vocal.", verificar:true, verificarNota:"Día inferido como martes, a continuación del grupo de niños 02 nuevos; confirmar con la docente."},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 01 (nuevos)", docente:"Sonia Gallego Ramírez", dias:["Martes"], horario:"Martes 9:00–10:00 am", cupo:6, edadMin:7, edadMax:12, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal niños 01 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:["Lunes"], horario:"Lunes 5:00–6:00 pm", cupo:4, edadMin:7, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes 02 (nuevos)", docente:"Sonia Gallego Ramírez", dias:["Lunes"], horario:"Lunes 4:00–5:00 pm", cupo:1, edadMin:13, edadMax:18, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes 01 (nuevos)", docente:"Sonia Gallego Ramírez", dias:["Lunes"], horario:"Lunes 3:00 pm", cupo:5, edadMin:13, edadMax:18, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Iniciación musical niños 02 (con experiencia)", docente:"Sonia Gallego Ramírez", dias:["Jueves"], horario:"Jueves 3:00 pm", cupo:6, edadMin:6, edadMax:12, salon:"", modalidad:"Con experiencia", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Iniciación musical niños 01 (nuevos)", docente:"Sonia Gallego Ramírez", dias:["Martes"], horario:"Martes 2:00–3:00 pm", cupo:1, edadMin:6, edadMax:12, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Iniciación musical adolescentes 03 (nuevos)", docente:"Sonia Gallego Ramírez", dias:["Martes"], horario:"Martes 5:00–6:00 pm", cupo:7, edadMin:13, edadMax:18, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
 
 // CANTO / TÉCNICA VOCAL — Manuela Castro
 {area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes y Adultos 01 (con experiencia)", docente:"Manuela Castro Alzate", dias:["Martes"], horario:"Martes 11:00 am–12:00 m", cupo:2, edadMin:20, edadMax:40, salon:"", modalidad:"Con experiencia", notas:"", verificar:false},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes y Adultos 03 (nuevos)", docente:"Manuela Castro Alzate", dias:["Miércoles"], horario:"Miércoles 5:00–6:00 pm", cupo:2, edadMin:20, edadMax:40, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
+{area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes y Adultos 03 (nuevos)", docente:"Manuela Castro Alzate", dias:["Miércoles"], horario:"Miércoles 5:00–6:00 pm", cupo:0, edadMin:20, edadMax:40, salon:"", modalidad:"Nuevos", notas:"", verificar:false},
 {area:"Canto / Técnica Vocal", curso:"Técnica vocal Jóvenes y Adultos 04 (con experiencia)", docente:"Manuela Castro Alzate", dias:["Miércoles"], horario:"Miércoles 10:00–11:00 am", cupo:2, edadMin:20, edadMax:40, salon:"", modalidad:"Con experiencia", notas:"", verificar:false},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal (grupo adicional)", docente:"Manuela Castro Alzate", dias:["Jueves"], horario:"Jueves 5:00 pm", cupo:3, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad y modalidad (nuevos/con experiencia) no especificadas; dato recibido por chat, confirmar con la docente."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal (grupo adicional)", docente:"Manuela Castro Alzate", dias:["Jueves"], horario:"Jueves 6:00 pm", cupo:2, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad y modalidad no especificadas; confirmar con la docente."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal (grupo adicional)", docente:"Manuela Castro Alzate", dias:["Viernes"], horario:"Viernes 11:00 am", cupo:3, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad y modalidad no especificadas; confirmar con la docente."},
-{area:"Canto / Técnica Vocal", curso:"Técnica vocal (grupo adicional)", docente:"Manuela Castro Alzate", dias:["Viernes"], horario:"Viernes 3:00 pm", cupo:2, edadMin:null, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Edad y modalidad no especificadas; confirmar con la docente."},
 
 // DANZA Y BAILES DE SALÓN
-{area:"Danza y Bailes de Salón", curso:"Salsa", docente:"Santiago Gil Hurtado", dias:["Martes"], horario:"Martes 6:00 pm", cupo:20, edadMin:13, edadMax:90, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Tango Salón", docente:"Santiago Gil Hurtado", dias:["Martes"], horario:"Martes 7:00 pm", cupo:20, edadMin:13, edadMax:90, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Bachata", docente:"Santiago Gil Hurtado", dias:["Miércoles"], horario:"Miércoles 7:00 pm", cupo:22, edadMin:13, edadMax:90, salon:"Auditorio", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Porro Intermedio", docente:"Santiago Gil Hurtado", dias:["Miércoles"], horario:"Miércoles 6:00 pm", cupo:20, edadMin:13, edadMax:90, salon:"Auditorio", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Iniciación a los Bailes de Salón (bolero, fox y pasodoble)", docente:"Santiago Gil Hurtado", dias:["Miércoles"], horario:"Miércoles 5:00 pm", cupo:20, edadMin:16, edadMax:90, salon:"Auditorio", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Proyectivo de Porro", docente:"Santiago Gil Hurtado", dias:["Martes"], horario:"Martes 5:00 pm", cupo:14, edadMin:13, edadMax:90, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Folclor Adultos", docente:"Vanesa Parra Carballo", dias:["Miércoles"], horario:"Miércoles 5:00 pm", cupo:10, edadMin:15, edadMax:null, salon:"Salón Danza Innova", modalidad:"", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Ritmos Tropicales (con experiencia) (antes 'Ritmos tropicales nuevos 01')", docente:"Vanesa Parra Carballo", dias:["Miércoles"], horario:"Miércoles 4:00–5:00 pm", cupo:5, edadMin:10, edadMax:15, salon:"Salón Danza Innova", modalidad:"Con experiencia", prereq:"Experiencia o conocimiento básico de danza", notas:"", verificar:false},
-{area:"Danza y Bailes de Salón", curso:"Iniciación a la Danza (nuevo)", docente:"Vanesa Parra Carballo", dias:["Martes"], horario:"Martes, hora sin especificar", cupo:15, edadMin:6, edadMax:8, salon:"Salón Danza o Auditorio", modalidad:"Nuevo", notas:"", verificar:true, verificarNota:"Hora exacta no especificada en la fuente."},
+{area:"Danza y Bailes de Salón", curso:"Salsa", docente:"Santiago Gil Hurtado", dias:["Martes"], horario:"Martes 6:00 pm", cupo:0, edadMin:13, edadMax:90, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Tango Salón", docente:"Santiago Gil Hurtado", dias:["Martes"], horario:"Martes 7:00 pm", cupo:4, edadMin:13, edadMax:90, salon:"Salón Danza", modalidad:"", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Bachata", docente:"Santiago Gil Hurtado", dias:["Miércoles"], horario:"Miércoles 7:00 pm", cupo:0, edadMin:13, edadMax:90, salon:"Auditorio", modalidad:"", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Porro Intermedio", docente:"Santiago Gil Hurtado", dias:["Miércoles"], horario:"Miércoles 6:00 pm", cupo:7, edadMin:13, edadMax:90, salon:"Auditorio", modalidad:"", prereq:"Debe tener conocimientos previos", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Iniciación a los Bailes de Salón (bolero, fox y pasodoble)", docente:"Santiago Gil Hurtado", dias:["Miércoles"], horario:"Miércoles 5:00 pm", cupo:0, edadMin:16, edadMax:90, salon:"Auditorio", modalidad:"", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Folclor Adultos", docente:"Vanesa Parra Carballo", dias:["Miércoles"], horario:"Miércoles 5:00 pm", cupo:9, edadMin:15, edadMax:null, salon:"Salón Danza Innova", modalidad:"", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Ritmos Tropicales (con experiencia) (antes 'Ritmos tropicales nuevos 01')", docente:"Vanesa Parra Carballo", dias:["Miércoles"], horario:"Miércoles 4:00–5:00 pm", cupo:1, edadMin:10, edadMax:15, salon:"Salón Danza Innova", modalidad:"Con experiencia", prereq:"Experiencia o conocimiento básico de danza", notas:"", verificar:false},
+{area:"Danza y Bailes de Salón", curso:"Iniciación a la Danza (nuevo)", docente:"Vanesa Parra Carballo", dias:["Martes"], horario:"Martes, hora sin especificar", cupo:8, edadMin:6, edadMax:8, salon:"Salón Danza o Auditorio", modalidad:"Nuevo", notas:"", verificar:true, verificarNota:"Hora exacta no especificada en la fuente."},
 
 // AUDIOVISUAL / PRODUCCIÓN MUSICAL
-{area:"Audiovisual / Producción Musical", curso:"Laboratorio Audiovisual 01", docente:"Jairo Andrés Palacio Villa", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:5, edadMin:13, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Audiovisual / Producción Musical", curso:"Laboratorio Audiovisual 02", docente:"Jairo Andrés Palacio Villa", dias:[], horario:"Sin cambios respecto al semestre anterior", cupo:5, edadMin:13, edadMax:null, salon:"", modalidad:"", notas:"", verificar:true, verificarNota:"Horario exacto no incluido en el reporte."},
-{area:"Audiovisual / Producción Musical", curso:"Producción Musical Jóvenes y Adultos", docente:"John Edison García Castro", dias:["Viernes"], horario:"Viernes 3:00–5:00 pm", cupo:4, edadMin:16, edadMax:null, salon:"", modalidad:"", notas:"Se habilitan 4 cupos nuevos.", verificar:false},
+{area:"Audiovisual / Producción Musical", curso:"Laboratorio Audiovisual 01", docente:"Jairo Andrés Palacio Villa", dias:["Lunes"], horario:"Lunes 3:00 pm", cupo:1, edadMin:13, edadMax:null, salon:"", modalidad:"", notas:"", verificar:false},
+{area:"Audiovisual / Producción Musical", curso:"Laboratorio Audiovisual 02", docente:"Jairo Andrés Palacio Villa", dias:["Miércoles"], horario:"Miércoles 3:00 pm", cupo:3, edadMin:13, edadMax:null, salon:"", modalidad:"", notas:"", verificar:false},
+{area:"Audiovisual / Producción Musical", curso:"Producción Musical Jóvenes y Adultos", docente:"John Edison García Castro", dias:["Viernes"], horario:"Viernes 3:00–5:00 pm", cupo:1, edadMin:16, edadMax:null, salon:"", modalidad:"", notas:"", verificar:false},
 ];
 
 // ---------- INIT ----------
@@ -404,6 +407,7 @@ function matchesFilters(c){
   const docente = document.getElementById('f-docente').value;
   const search = document.getElementById('f-search').value.trim().toLowerCase();
   const hideVerificar = document.getElementById('f-hide-verificar').checked;
+  const hideAgotados = document.getElementById('f-hide-agotados').checked;
 
   if(edadVal !== ""){
     const edad = parseInt(edadVal,10);
@@ -417,6 +421,7 @@ function matchesFilters(c){
     if(!hasDay) return false;
   }
   if(hideVerificar && c.verificar) return false;
+  if(hideAgotados && c.cupo === 0) return false;
   if(search){
     const blob = (c.curso+" "+c.docente+" "+c.area+" "+(c.notas||"")+" "+(c.prereq||"")+" "+c.horario).toLowerCase();
     if(!blob.includes(search)) return false;
@@ -440,7 +445,10 @@ function render(){
     '</tr></thead><tbody>';
 
   filtered.forEach(c=>{
-    const cupoHtml = c.cupo!=null ? `<span class="cupo-val">${c.cupo}</span>` : `<span class="cupo-na">s/e</span>`;
+    const agotado = c.cupo === 0;
+    const cupoHtml = c.cupo!=null
+      ? (agotado ? `<span class="badge-agotado">AGOTADO</span>` : `<span class="cupo-val">${c.cupo}</span>`)
+      : `<span class="cupo-na">s/e</span>`;
     const diasHtml = c.dias.length ? c.dias.join(", ") : "—";
     let notas = "";
     if(c.verificar) notas += `<span class="badge-warn">⚠️ VERIFICAR</span> `;
@@ -448,7 +456,7 @@ function render(){
     if(c.notas) notas += c.notas;
     if(c.prereq) notas += (notas?"<br>":"")+"Prerrequisito: "+c.prereq;
 
-    html += `<tr>
+    html += `<tr class="${agotado?'row-agotado':''}">
       <td><span class="area-tag">${c.area}</span></td>
       <td><span class="curso-name">${c.curso}</span>${c.modalidad?`<span class="curso-mod">${c.modalidad}</span>`:""}</td>
       <td>${c.docente}</td>
@@ -471,6 +479,7 @@ function resetFilters(){
   document.getElementById('f-docente').value = "";
   document.getElementById('f-search').value = "";
   document.getElementById('f-hide-verificar').checked = false;
+  document.getElementById('f-hide-agotados').checked = true;
   selectedDays.clear();
   document.querySelectorAll('.day-chip').forEach(el=>el.classList.remove('active'));
   render();
@@ -481,6 +490,7 @@ document.getElementById('f-area').addEventListener('change', render);
 document.getElementById('f-docente').addEventListener('change', render);
 document.getElementById('f-search').addEventListener('input', render);
 document.getElementById('f-hide-verificar').addEventListener('change', render);
+document.getElementById('f-hide-agotados').addEventListener('change', render);
 document.getElementById('btn-reset').addEventListener('click', resetFilters);
 
 populateSelects();
